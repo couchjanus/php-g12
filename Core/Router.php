@@ -2,25 +2,9 @@
 
 function getURI()
 {
-    return $_SERVER['REQUEST_URI'];
+    if (isset($_SERVER['REQUEST_URI']) and !empty($_SERVER['REQUEST_URI']))
+        return trim($_SERVER['REQUEST_URI'], '/');
 }
-
-
-// function getURI()
-// {
-//     return trim($_SERVER['REQUEST_URI'], '/');
-// }
-
-// function getURI(){
-//     if (isset($_SERVER['REQUEST_URI']) and !empty($_SERVER['REQUEST_URI']))
-//         return $_SERVER['REQUEST_URI'];
-// }
-
-// function getURI()
-// {
-//     if (isset($_SERVER['REQUEST_URI']) and !empty($_SERVER['REQUEST_URI']))
-//         return trim($_SERVER['REQUEST_URI'], '/');
-// }
 
 // получаем строку запроса
 switch (getURI()) {
@@ -31,6 +15,10 @@ switch (getURI()) {
     case 'about':
         # code...
         require_once CONTROLLERS.'AboutController.php';
+        break;
+    case 'guest':
+        # code...
+        require_once CONTROLLERS.'GuestbookController.php';
         break;
     case 'contact':
         # code...

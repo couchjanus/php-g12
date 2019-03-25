@@ -7,6 +7,7 @@
         <ul class="nav-menu">
             <li class="nav-item"><a href="/">Home</a></li>
             <li class="nav-item"><a href="/about">About</a></li>
+            <li class="nav-item"><a href="/guest">Guest Book</a></li>
             <li class="nav-item"><a href="/contact">Contact</a></li>
         </ul>
 </nav>

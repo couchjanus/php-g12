@@ -1,4 +1,4 @@
-<aside class="aside">
+<aside class="aside" hidden>
     <header><a href="#0" class="toggle-sidebar">close</a></header>
     <div id="cart-sidebar" class="cart--sidebar">
         <h2>Cart</h2>
