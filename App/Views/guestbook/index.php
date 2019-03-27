@@ -92,7 +92,7 @@ require_once VIEWS.'partials/_navigation.php';
     <div class="wrap">
         <!--Section: Form -->
         <div class="feedback">
-            <h1>Guest Book</h1>
+            <h1><?php printf("<h1 style='color: #%x%x%x'>Cat's GuestBook</h1>", 165, 27, 45);?></h1>
                 <form action="" method="POST">
                     <div class="row">
                         <input type="text" id="text" class="row_input" required  name="username">
@@ -119,12 +119,22 @@ require_once VIEWS.'partials/_navigation.php';
 <?php
 
 echo "<pre>"; 
-// print_r($comments);
+print_r($comments);
 echo "</pre>"; 
 
-// foreach ($comments as $key => $value) {
-//     echo("<div class='top'><b>User ".$value[0]." </b> <a href='mailto:".$value[1]."'>".$value[1]."</a>  Added this: </div><div class='comment'>".strip_tags($value[2])."</div>"."<p>At ".strip_tags($value[3])."</p><hr>");
-// }
+if ($resCount>0) {
+    printf("<h3>В Guest Book находится %d Comments</h3>", $resCount);
+    
+    foreach ($comments as $row) {
+      echo "<div class='top'><b>User ".$row["username"]."</b> <a href='mailto:".$row["email"]."'>".$row["email"]."</a> Added this </div>"; 
+      echo "<div class='comment'>".strip_tags($row["message"])."</div>"; 
+      echo "<div class='added_at'> At: ".strip_tags($row["created_at"])."</div>"; 
+    }
+}
+else {
+  echo "No comments.... ";
+}
+   
 ?>
 </div>
 
