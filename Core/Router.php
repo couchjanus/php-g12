@@ -6,6 +6,21 @@ function getURI()
         return trim($_SERVER['REQUEST_URI'], '/');
 }
 
+function getPathControllerAction($route)
+{
+    $segments = explode('\\', $route);
+    list($controller, $action) = explode('@', array_pop($segments));
+    $controllerPath = DIRECTORY_SEPARATOR;
+    do {
+        if (count($segments)===0) {
+            return array ($controllerPath, $controller, $action);
+        } else {
+            $segment = array_shift($segments);
+            $controllerPath = $controllerPath . $segment . DIRECTORY_SEPARATOR;
+        }
+    } while (count($segments)>=0);
+}
+
 $result = null;
 
 // Подключаем строку запроса
@@ -20,82 +35,31 @@ if (file_exists($filename)) {
     echo "Файл $filename не существует";
 }
 
-// Проверить наличие такого запроса в routes
-
-// foreach ($routes as $route => $path) {
-//     //Сравниваем route и $uri
-//     if ($route == $uri) {
+foreach ($routes as $route => $path) {
+    //Сравниваем route и $uri
+    if ($route == $uri) {
         
-//         // Определить path
-//         $controller = $path;
-
-//         //Подключаем файл контроллера
-//         $controllerFile = CONTROLLERS . $controller . EXT;
+        // list($controller, $action) = explode('@', $path);
+        list($controllerPath, $controller, $action ) = getPathControllerAction($path);
+        //Подключаем файл контроллера
+        // $controllerFile = CONTROLLERS . $controller . EXT;
+        $controllerFile = CONTROLLERS .$controllerPath . $controller . EXT;
         
-//         if (file_exists($controllerFile)) {
-//             include_once $controllerFile;
-//             $controller = new $controller;
-//             $result = true;
-//         }
+        if (file_exists($controllerFile)) {
+            include_once $controllerFile;
+            $controller = new $controller;
 
-//         if ($result !== null) {
-//             break;
-//         }
-//     }
-// }
-// ===================method_exists==============================
-// foreach ($routes as $route => $path) {
-//     //Сравниваем route и $uri
-//     if ($route == $uri) {
-        
-//         // Определить path
-//         $controller = $path;
-//         $action = 'index';
+            if (method_exists($controller, $action)) {
+                $controller->$action();
+            }
+            $result = true;
+        }
 
-//         //Подключаем файл контроллера
-//         $controllerFile = CONTROLLERS . $controller . EXT;
-        
-//         if (file_exists($controllerFile)) {
-//             include_once $controllerFile;
-//             $controller = new $controller;
-
-//             if (method_exists($controller, $action)) {
-//                 $controller->$action();
-//             }
-//             $result = true;
-//         }
-
-//         if ($result !== null) {
-//             break;
-//         }
-//     }
-// }
-// ===================action==============================
-
-// foreach ($routes as $route => $path) {
-//     //Сравниваем route и $uri
-//     if ($route == $uri) {
-        
-//         list($controller, $action) = explode('@', $path);
-
-//         //Подключаем файл контроллера
-//         $controllerFile = CONTROLLERS . $controller . EXT;
-        
-//         if (file_exists($controllerFile)) {
-//             include_once $controllerFile;
-//             $controller = new $controller;
-
-//             if (method_exists($controller, $action)) {
-//                 $controller->$action();
-//             }
-//             $result = true;
-//         }
-
-//         if ($result !== null) {
-//             break;
-//         }
-//     }
-// }
+        if ($result !== null) {
+            break;
+        }
+    }
+}
 
 if ($result === null) {
     include_once VIEWS.'errors/404'.EXT;

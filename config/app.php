@@ -2,7 +2,7 @@
   
     define('ROOT', realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR));
     const VIEWS = ROOT.'/App/Views/';
-    const CONTROLLERS = ROOT.'/App/Controllers/';
+    const CONTROLLERS = ROOT.'/App/Controllers';
     const MODELS = ROOT.'/App/Models/';
     const CONFIG = ROOT.'/config/';
     

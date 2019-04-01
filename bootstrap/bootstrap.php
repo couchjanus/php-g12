@@ -20,5 +20,6 @@ function render($path, $data = [])
 
 // ============================================
 require_once realpath(__DIR__).'/../config/app.php';
-
+require_once CORE.'View.php';
+require_once CORE.'Controller.php';
 require_once CORE.'Router.php';
