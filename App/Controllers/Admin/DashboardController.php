@@ -1,10 +1,8 @@
 <?php
-class DashboardController   
+class DashboardController extends Controller 
 {
 	public function index()
 	{
-        // echo "Dashboard Controller";
-        render('admin/index', ['title'=>'Dashboard Controller PAGE']);
+		$this->_view->renderView('admin/index', ['title'=>'Dashboard Controller PAGE']);
 	}
 }
-

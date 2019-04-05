@@ -19,7 +19,7 @@ class CategoryController extends Controller
         $data['categories'] = $categories;
         $data['title'] = 'Category List Page ';
         $data['numRows'] = count($categories);
-        $this->_view->render('admin/categories/index', $data);
+        $this->_view->renderView('admin/categories/index', $data);
     }
     /**
      * Добавление категории
@@ -38,6 +38,6 @@ class CategoryController extends Controller
         }
 
         $data['title'] = 'Admin Category Add New Category ';
-        $this->_view->render('admin/categories/create', $data);
+        $this->_view->renderView('admin/categories/create', $data);
     }
 }

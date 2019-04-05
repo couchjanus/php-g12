@@ -8,7 +8,7 @@ class HomeController extends Controller
     {
         $title = 'Our <b>Best Cat Members Home Page </b>';
 
-        $this->_view->render('pages/index', ['title'=>$title]);
+        $this->_view->renderView('pages/index', ['title'=>$title]);
     }
 }
 
