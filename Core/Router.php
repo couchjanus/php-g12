@@ -1,20 +1,28 @@
 <?php
 
-define('ROUTES', require CONFIG.'routes'.EXT);
-
 class Router
 {
     protected $routes = ROUTES;
 
     public function direct($uri)
-    {   
+    {
         if (array_key_exists($uri, $this->routes)) {
             return $this->callAction(
                 ...$this->getAction($this->routes[$uri])
             );
         } else {
+            foreach ($this->routes as $key => $val) {
+                
+                $pattern = "@^" .preg_replace('/{([a-zA-Z0-9]+)}/', '(?<$1>[0-9]+)', $key). "$@";
+                preg_match($pattern, $uri, $matches);
+                array_shift($matches);
+                if ($matches) {
+                    $getAction = $this->getAction($val);
+                    return $this->callAction($getAction[0], $getAction[1], $getAction[2], $matches);
+                }
+            }
             return $this->callAction(
-                ...$this->getAction($this->routes['404'])
+                ...$this->getPathAction($this->routes['404'])
             ); 
         }
     }
@@ -24,20 +32,21 @@ class Router
         list($segments, $action) = explode('@', $route);
         $segments = explode('\\', $segments);
         $controller = array_pop($segments);
-        $controllerFile = '/';
+        $getControllerPath = '/';
         do {
             if (count($segments)==0) {
-                return array ($controller, $action, $controllerFile);
+                return array ($controller, $action, $getControllerPath);
             } else {
                 $segment = array_shift($segments);
-                $controllerFile = $controllerFile.$segment.'/';
+                $getControllerPath = $getControllerPath.$segment.'/';
             }
         } while ( count($segments) >= 0);
+
     }
 
-    protected function callAction($controller, $action, $controllerPath)
+    protected function callAction($controller, $action, $getControllerPath, $vars = [])
     {
-        include CONTROLLERS .$controllerPath . $controller . EXT;
+        include CONTROLLERS.$getControllerPath.'/'.$controller.EXT;
         
         $controller = new $controller;
         
@@ -46,6 +55,6 @@ class Router
                 "{$controller} does not respond to the {$action} action."
             );
         }
-        return $controller->$action();
+        return $controller->$action($vars);
     }
 }

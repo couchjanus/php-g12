@@ -26,5 +26,7 @@ require_once CORE.'View.php';
 require_once CORE.'Controller.php';
 require_once CORE.'Router.php';
 
+define('ROUTES', require CONFIG.'routes'.EXT);
+
 $router = new Router();
 $router->direct(getURI());

@@ -25,9 +25,10 @@ require_once VIEWS.'partials/admin/_head.php';
         <td><?php echo $category->name?></td>
         <td>
           <button class="btn btn-default"><span data-feather="eye"></span> View</button>
-          <button class="btn btn-primary"><span data-feather="edit"></span> Edit</button>
-          <button class="btn btn-danger"><span data-feather="delete"></span> Delete</button></td>
-        </tr>
+          <a href="/admin/categories/edit/<?=$category->id?>"><button class="btn btn-primary"><span data-feather="edit"></span> Edit</button></a>
+          <a href="/admin/categories/delete/<?=$category->id?>"><button class="btn btn-danger"><span data-feather="delete"></span> Delete</button></a>
+        </td>
+      </tr>
     <?php endforeach;?>
     
     </tbody>
