@@ -15,6 +15,12 @@ return [
    
    'admin/products' => 'Admin\ProductController@index',
    'admin/products/create' => 'Admin\ProductController@create',
+
+   'admin/products/edit/{id}' => 'Admin\ProductController@edit',
+   'admin/products/delete/{id}' => 'Admin\ProductController@delete',
+   'admin/products/show/{id}' => 'Admin\ProductController@show',
+
+
    //Главаня страница
    '404' => 'PagesController@notFound',
    'index.php' => 'HomeController@index',
