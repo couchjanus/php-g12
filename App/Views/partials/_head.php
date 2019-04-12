@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Shopping cart</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-
+<html class="no-js" lang="en">
+  <head>
+    <?php require_once VIEWS.'partials/_meta.php';?>
+    <title>Peculiar Shopaholic</title>
+    <?php require_once VIEWS.'partials/_styles.php';?>
+  </head>
 <body>
+<?php require_once VIEWS.'partials/_navigation.php';?>

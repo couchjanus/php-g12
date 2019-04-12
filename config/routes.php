@@ -6,6 +6,9 @@ return [
    'blog' => 'BlogController@index',
    'guest' => 'GuestbookController@index',
 
+   'api/shop'=> 'HomeController@getProducts',
+   'product-detail/{id}'=> 'HomeController@getProduct',
+
    'admin' => 'Admin\DashboardController@index',
    'admin/categories' => 'Admin\CategoryController@index',
    'admin/categories/create' => 'Admin\CategoryController@create',

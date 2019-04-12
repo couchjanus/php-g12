@@ -107,10 +107,21 @@ class Product
                 JOIN pictures t2
                 ON t2.resource = 'products' 
                 AND t1.id = t2.resource_id
-                ORDER BY id ASC";
-      
+                ORDER BY id ASC
+            ";
+    
         $stmt = Connection::query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+
+    public static function getBySlug($id)
+    {
+        $stmt = Connection::prepare("SELECT t1.*, t2.filename as picture, t2.resource_id  as resource_id FROM products t1 JOIN pictures t2 ON t2.resource = 'products' AND t1.id = t2.resource_id WHERE t1.id = :id");
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_BOTH);
+    }
+
 
 }

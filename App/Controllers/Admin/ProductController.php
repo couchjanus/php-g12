@@ -120,14 +120,28 @@ class ProductController extends Controller
         
             Product::store($options);
             
-            if (isset($_FILES['image'])) {
-                $imgUploader = new Uploader($_SERVER['DOCUMENT_ROOT'] . '/images/products/');
-                $name = $imgUploader->upload($_FILES['image']);
-                $opts['filename'] = $name;
-                $opts['resource_id'] = (int)Product::lastId();
-                $opts['resource'] = $this->_resource;
-                Picture::store($opts);
-            }
+            if (isset($_FILES['images'])) {
+                 //Каталог загрузки картинок
+                $uploadDir = 'images/products';
+                $countfiles = count($_FILES['images']['name']);
+                // Looping all files
+                for($i=0;$i<$countfiles;$i++){
+                    $filename = $_FILES['images']['name'][$i];
+                    $type = pathinfo($filename);
+                    $name = uniqid('files_') .'.'. $type['extension'];
+
+                    // Upload file
+                    move_uploaded_file($_FILES['images']['tmp_name'][$i], $uploadDir.'/'.$name);
+                    $opts['filename'] = $name;
+                    $opts['resource_id'] = (int)Product::lastId();
+                    $opts['resource'] = $this->_resource;
+                    Picture::store($opts);
+                    
+            
+                }
+            } 
+            
+    
         
             Helper::redirect('/admin/products');
         }
