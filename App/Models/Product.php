@@ -102,12 +102,12 @@ class Product
 
     public static function getProducts()
     {
-        $sql = "SELECT t1.*, t2.filename as picture
+        $sql = "SELECT DISTINCT t1.*, t2.filename as picture
                 FROM products t1
                 JOIN pictures t2
                 ON t2.resource = 'products' 
                 AND t1.id = t2.resource_id
-                ORDER BY id ASC
+                GROUP BY id
             ";
     
         $stmt = Connection::query($sql);
@@ -121,6 +121,28 @@ class Product
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_BOTH);
+    }
+
+    public static function getProduct($id)
+    {
+        $stmt = Connection::prepare("SELECT t1.*, t2.filename as picture
+        FROM products t1 
+        LEFT OUTER JOIN pictures t2
+        on t1.id=t2.resource_id 
+        where t1.id = :id");
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        $pictures = [];
+        array_push($pictures, $res['picture']);
+        
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            array_push($pictures, $row['picture']);
+        }
+        
+        $res['picture'] = $pictures;
+        return $res;
     }
 
 

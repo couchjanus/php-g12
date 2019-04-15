@@ -7,7 +7,8 @@ return [
    'guest' => 'GuestbookController@index',
 
    'api/shop'=> 'HomeController@getProducts',
-   'product-detail/{id}'=> 'HomeController@getProduct',
+   // 'product-detail/{id}'=> 'HomeController@getProduct',
+   'api/detail/{id}'=> 'HomeController@getProduct',
 
    'admin' => 'Admin\DashboardController@index',
    'admin/categories' => 'Admin\CategoryController@index',
@@ -28,4 +29,12 @@ return [
    '404' => 'PagesController@notFound',
    'index.php' => 'HomeController@index',
    '' => 'HomeController@index',
+
+   'auth' => 'AuthController@signup',
+   'register' => 'AuthController@signup',
+   'login' => 'AuthController@signin',
+   'logout' => 'AuthController@logout',
+
+   'profile'=>'ProfileController@index',
+
 ];

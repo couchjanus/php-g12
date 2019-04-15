@@ -22,4 +22,18 @@ class Helper {
         }
     }
 
+
+    /**
+     * 
+     *Запись пользователя в сессию
+     *
+     * @param $userId
+     */
+    
+    public static function auth($userId)
+    {
+        Session::set('userId', $userId);
+        Session::set('logged', true);
+    }
+
 }

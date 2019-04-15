@@ -11,7 +11,7 @@ class HomeController extends Controller
         $this->_view->renderView('pages/index', ['title'=>$title]);
     }
 
-    public function getProducts($vars)
+    public function getProducts()
     {
         $products = Product::getProducts();
         echo json_encode($products);
@@ -21,9 +21,8 @@ class HomeController extends Controller
     public function getProduct($vars)
     {
         extract($vars);
-        $product = Product::getBySlug($id);
+        $product = Product::getProduct($id);
         echo json_encode($product);
-        // var_dump($product);
         
     }
 }

@@ -1,32 +1,52 @@
 <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "ghbdtn";
-$dbname = "store";
+// pdo.select.from.table.categories.php
 
-// Create connection
+// example of PDO MySQL connection
+$params = [
+    'host' => 'localhost',
+    'user' => 'root',
+    'pwd'  => 'ghbdtn',
+    'db' => "store"
+];
 
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-/* проверка соединения */
-if (mysqli_connect_errno()) {
-    printf("Не удалось подключиться: %s\n", mysqli_connect_error());
-    exit();
-}
-echo "Connected successfully\n\n";
+// подключаемся к базе данных
+try {
+    $dsn  = sprintf('mysql:charset=utf8mb4;host=%s;dbname=%s', $params['host'], $params['db']);
+    $pdo  = new PDO($dsn, $params['user'], $params['pwd']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Create sql
+    $stmt = $pdo->query("
+        SELECT t1.*, t2.filename as picture
+        FROM products t1 
+        LEFT OUTER JOIN pictures t2
+        on t1.id=t2.resource_id 
+        where t1.id = 14
+    ");
 
-$sql = "SELECT * FROM guestbook";
-
-$result = mysqli_query($conn, $sql);
-
-if (mysqli_num_rows($result) > 0) {
-    // output data of each row
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "id: " . $row["id"]. " - User Name: " . $row["username"]. " Email: " . $row["email"]. " Comment: " . $row["message"]. " Created: " . $row["created_at"]. "\n\n";
+    // $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // var_dump($res);
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
+    // var_dump($res);
+    $pictures = [];
+    array_push($pictures, $res['picture']);
+    
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        array_push($pictures, $row['picture']);
     }
-} else {
-    echo "0 results\n";
+    // var_dump($pictures). "\n";
+    $res['picture'] = $pictures;
+    var_dump($res);
+    var_dump($res['picture'][0]);
+
+    echo "All rows fetched successfully\n\n";
 }
-mysqli_close($conn);
+catch(PDOException $e) {
+    error_log($e->getMessage());
+    file_put_contents('PDOErrors.log', $e->getMessage(), FILE_APPEND);
+} catch (Throwable $e) {
+    error_log($e->getMessage());
+}
+finally {
+    $pdo = null;
+}

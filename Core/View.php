@@ -35,4 +35,10 @@ class View {
         extract($data);
         return require VIEWS."/{$path}.php";
     }
+
+    public function auth($path, $data = [], $error = false)
+    {
+        extract($data);
+        return require VIEWS."/{$path}.php";
+    }
 }

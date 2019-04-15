@@ -47,9 +47,10 @@ function makeProductItem($template, product) {
 }
 
 function makeProduct($template, product) {
-
-    $template.querySelector('.carousel-item--1 .carousel-item__image').style.backgroundImage = "url('images/products/"+product.picture+"')";
-    
+    for (let j=0; j<product['picture'].length; j++) {
+        let carouselItem = '.carousel-item--'+(j+1)+' .carousel-item__image';
+        $template.querySelector(carouselItem).style.backgroundImage = "url('images/products/"+product.picture[j]+"')";    
+    }
     return $template;
 }
 
@@ -212,7 +213,7 @@ class Product {
                         element.addEventListener('click', function (e) {
                             document.querySelector("#main-content").innerHTML='';
 
-                        fetch('/product-detail/'+e.target.getAttribute('slug')).then(
+                        fetch('api/detail/'+e.target.getAttribute('slug')).then(
                         (response) => {
                             if (response.status !== 200) {
                                 console.log('Looks like there was a problem. Status Code: ' + response.status);
