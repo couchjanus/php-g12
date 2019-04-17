@@ -18,6 +18,7 @@ class RoleController extends Controller
         $this->_view->renderView('admin/roles/index', ['roles' => $roles, 'title' => 'Role List Page ', 'numRows' => count($roles)]);
     }
 
+
     /**
      * Добавление role
      *
@@ -25,13 +26,15 @@ class RoleController extends Controller
      */
     public function create()
     {
-        if (isset($_POST) and !empty($_POST)) {
-            $opts = [];
-            array_push($opts, trim(strip_tags($_POST['name'])));
-            Role::store($opts);
-            Helper::redirect('/admin/roles');
-        }
         $this->_view->renderView('admin/roles/create', ['title'=> 'Add New Role ']);
+    }
+
+    public function save()
+    {
+        $opts = [];
+        array_push($opts, trim(strip_tags($_POST['name'])));
+        Role::store($opts);
+        Helper::redirect('/admin/roles');
     }
 
     public function edit($vars)

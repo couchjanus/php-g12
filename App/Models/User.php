@@ -107,6 +107,18 @@ class User
         return false;
     }
 
-    
+    public static function updateProfile($userId, $options)
+    {
+        $sql = "UPDATE users
+                SET phone_number = :phone_number, first_name = :first_name, last_name = :last_name
+                WHERE id = :id";
+        $stmt = Connection::prepare($sql);
+        $stmt->bindParam(':phone_number', $options['phone_number'], PDO::PARAM_STR);
+        $stmt->bindParam(':first_name', $options['first_name'], PDO::PARAM_STR);
+        $stmt->bindParam(':last_name', $options['last_name'], PDO::PARAM_STR);
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
     
 }
