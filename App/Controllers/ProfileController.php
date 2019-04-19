@@ -1,7 +1,7 @@
 <?php
 
 require_once MODELS.'User.php';
-
+require_once MODELS.'Order.php';
 /**
  * ProfileController.php
  * Контроллер для authetication users
@@ -37,7 +37,7 @@ class ProfileController extends Controller
         } else {
             $this->_view->renderView('profile/index', compact('user'));
         }
-        
+
     }
 
     /**
@@ -57,7 +57,7 @@ class ProfileController extends Controller
         $res = false;
         //Флаг ошибок
         $errors = false;
-        
+
         $options['name'] = trim(strip_tags($_POST['name']));
         $options['phone_number'] = trim(strip_tags($_POST['phone_number']));
         $options['first_name'] = trim(strip_tags($_POST['first_name']));
@@ -80,8 +80,31 @@ class ProfileController extends Controller
 
     public function ordersList()
     {
-        
+        $orders = Order::getOrdersListByUserId($this->userId);
+        $title = 'Личный кабинет ';
+        $subtitle = 'Ваши заказы ';
+        $user = $this->user;
+
+        $this->_view->renderView('profile/orders', compact('user', 'orders', 'title', 'subtitle'));
     }
 
-    
+    public function ordersView($vars)
+    {
+        extract($vars);
+        $order = Order::getUserOrderById($id);
+
+        $title = 'Личный кабинет ';
+        $subtitle = 'Ваш заказ #'.$order['id'];
+
+        //Преобразуем JSON  строку продуктов и их кол-ва в массив
+        $orders = json_decode(json_decode($order['products'], true));
+        $products = [];
+
+        for ($i=0; $i<count($orders); $i++) {
+            array_push($products, (array)$orders[$i]);
+        }
+        $user = $this->user;
+        $this->_view->renderView('profile/order', compact('user', 'orders', 'order', 'title', 'subtitle', 'products'));
+    }
+
 }

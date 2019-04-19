@@ -3,8 +3,9 @@
         <div class="logo"></div>
         <div class="navigation-name">Welcome Back <?php echo $user['name'];?>!</div>
         <div class="navigation">
+            <a href="/profile">My Profile</a>
             <a href="#">Edit Profile</a>
-            <a href="#">Orders</a>
+            <a href="/profile/orders">Orders</a>
             <a href="#">Friends</a>
             <a href="#">Logout</a>
         </div>

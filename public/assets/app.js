@@ -137,7 +137,46 @@ class Product {
         this.Picture = picture;
     }
 }
-// ---------------------------------------------------------------------------------
+
+var serializeArray = function (form) {
+
+	// Setup our serialized data
+	var serialized = [];
+
+	// Loop through each field in the form
+	for (var i = 0; i < form.elements.length; i++) {
+
+		var field = form.elements[i];
+
+		// Don't serialize fields without a name, submits, buttons, file and reset inputs, and disabled fields
+		if (!field.name || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') continue;
+
+		// If a multi-select, get all selections
+		if (field.type === 'select-multiple') {
+			for (var n = 0; n < field.options.length; n++) {
+				if (!field.options[n].selected) continue;
+				serialized.push({
+					name: field.name,
+					value: field.options[n].value
+				});
+			}
+		}
+
+		// Convert field data to a query string
+		else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
+			serialized.push({
+				name: field.name,
+				value: field.value
+			});
+		}
+	}
+
+	return serialized;
+
+};
+
+
+// --------------------------------------------------------------------
 (function () {
     const $template = document.getElementById("productItem").content;
     const $templateDetail = document.getElementById("productDetail").content;
@@ -342,6 +381,81 @@ class Product {
             console.log('Fetch Error :-S', err);
         });
 
+    document.querySelector(".checkout__trigger").addEventListener('click', () => {
+        fetch('/api/check').then(
+            (response) => {
+                
+                if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' + response.status);
+                    return;
+                }
+                
+                response.json().then((d) => {
+                    closeCart();
+                    const $templateCheck = document.getElementById("order-form").content;
+
+                    let cart_total = document.querySelector('.cart-total span').textContent;
+                    $templateCheck.querySelector("span.price").textContent = '$' + cart_total;
+                    $templateCheck.querySelector("#sub_price").textContent = '$' + cart_total;
+
+                    var sub_tax = 2.45;
+                    var sub_ship = 4.00;
+                    var calculated_total = parseFloat(cart_total) + sub_tax + sub_ship;
+
+                    $templateCheck.querySelector("#sub_tax").textContent = '$' + parseFloat(sub_tax);
+                    $templateCheck.querySelector(".sub_ship").textContent = '$' + sub_ship;
+                    $templateCheck.querySelector("#calculated_total").textContent = '$' + calculated_total;
+
+
+                    $templateCheck.querySelector("#first_name").value = d.first_name;
+                    $templateCheck.querySelector("#last_name").value = d.last_name;
+                    $templateCheck.querySelector("#phone_number").value= d.phone_number;
+
+                    document.querySelector("#main-content").innerHTML='';
+
+                    document.querySelector('#main-content').append(document.importNode($templateCheck, true));
+
+                    // ----------------------------------------
+
+                    document.querySelector('#complete').addEventListener('click', function() {
+                        fetch('/api/cart', 
+                        {
+                            method: "POST", // *GET, POST, PUT, DELETE, etc.
+                            // mode: "cors", // no-cors, cors, *same-origin
+                            // cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                            // credentials: "same-origin", // include, *same-origin, omit
+                            headers: {
+                                "Content-Type": "application/json",
+                                // "Content-Type": "application/x-www-form-urlencoded",
+                            },
+                            // redirect: "follow", // manual, *follow, error
+                            // referrer: "no-referrer", // no-referrer, *client
+
+                            body: JSON.stringify({
+                                "cart": shoppingCart,
+                                "first_name": document.querySelector("#first_name").value,
+                                "last_name": document.querySelector("#last_name").value,
+                                "phone_number": document.querySelector("#phone_number").value
+                            }),
+                            
+                        })
+                        .then(function(response) {
+                            console.log('Request success: ', response); 
+                                localStorage.removeItem(
+                                    'shoppingCart');
+                                    document.querySelector(".cart-items").innerHTML = '';
+                                shoppingCart = [];
+                                updateTotal();
+                                document.location.replace('/profile');
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            });
+                    });
+                });
+        });
+    
+    });
 
     // ====================================================================
 })();

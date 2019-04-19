@@ -8,7 +8,7 @@ class User
      * @return users list
     **/
 
-    public static function index() 
+    public static function index()
     {
         $stmt = Connection::query("SELECT * FROM users ORDER BY id ASC");
         return $stmt->fetchAll(PDO::FETCH_CLASS, 'User');
@@ -22,20 +22,12 @@ class User
         $stmt->bindParam(':name', $options['name'], PDO::PARAM_STR);
         $stmt->bindParam(':email', $options['email'], PDO::PARAM_STR);
         $stmt->bindParam(':role', $options['role'], PDO::PARAM_INT);
-        
-        /**
-         * Использование password_hash() с ручным заданием стоимости
-         * Увеличиваем алгоритмическую стоимость BCRYPT до 12.
-         * Но это никак не скажется на длине полученного результата, она останется 60 символов
-         */
+
         $costs = [
             'cost' => 12,
         ];
         $hash = password_hash($options['password'], PASSWORD_BCRYPT, $costs);
         $stmt->bindParam(':password', $hash, PDO::PARAM_STR);
-
-        // $stmt->bindParam(':password', $options['password'], PDO::PARAM_STR);
-        
         return $stmt->execute();
     }
 
@@ -49,7 +41,6 @@ class User
         $passwordFromDatabase = $stmt->fetch(PDO::FETCH_ASSOC)['password'];
         $password = $options['password'];
         if (!password_verify($password, $passwordFromDatabase)) {
-          // update hash from databse - replace old hash $passwordFromDatabase with new hash $newPasswordHash
             $password = password_hash($options['password'], PASSWORD_DEFAULT, ["cost" => 12]);
         }
         $sql = "UPDATE users
@@ -60,14 +51,14 @@ class User
         $stmt->bindParam(':password', $password, PDO::PARAM_STR);
         $stmt->bindParam(':name', $options['name'], PDO::PARAM_STR);
         $stmt->bindParam(':email', $options['email'], PDO::PARAM_STR);
-       
+
         $status = $options['status']? 1:0;
         $stmt->bindParam(':status', $status, PDO::PARAM_INT);
         $stmt->bindParam(':role_id', $options['role_id'], PDO::PARAM_INT);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
-    
+
     /* Выбор user по id  */
     public static function getById($id)
     {
@@ -98,7 +89,7 @@ class User
                 WHERE email = :email
                 ";
         $stmt = Connection::prepare($sql);
-        $stmt->bindParam(':email', $email, PDO::PARAM_INT);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         $user = $stmt->fetch();
         if (password_verify($password, $user['password'])) {
@@ -120,5 +111,17 @@ class User
         return $stmt->execute();
     }
 
-    
+    public static function checkPhoneNumber($id)
+    {
+        $sql = "SELECT phone_number FROM users
+                    WHERE id = :id";
+        $stmt = Connection::prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($stmt->fetchColumn())
+            return $stmt->fetchColumn();
+        return false;
+    }
+
 }
