@@ -1,6 +1,10 @@
 <?php
-  
-    define('ROOT', realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR));
+
+    // define('ROOT', realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR));
+    
+    define('ROOT', dirname(__DIR__));
+    const APP = ROOT.'/App';
+
     const VIEWS = ROOT.'/App/Views/';
     const CONTROLLERS = ROOT.'/App/Controllers';
     const MODELS = ROOT.'/App/Models/';
@@ -15,3 +19,5 @@
     define('DB_CONFIG_FILE', CONFIG.'db.php');
     define('LOGS', ROOT.'/logs/');
     const SESSION_PREFIX = 'shop_';
+
+    const ROUTES = CONFIG.'routes'.EXT;

@@ -3,7 +3,13 @@
  * AuthController.php
  * Контроллер для authetication users
  */
-require_once MODELS.'User.php';
+// require_once MODELS.'User.php';
+namespace App\Controllers;
+
+use App\Models\User;
+use Core\Controller;
+use Core\Helper;
+use Core\Session;
 
 class AuthController extends Controller
 {

@@ -1,7 +1,14 @@
 <?php
 
-require_once MODELS.'User.php';
-require_once MODELS.'Order.php';
+// require_once MODELS.'User.php';
+// require_once MODELS.'Order.php';
+
+namespace App\Controllers;
+
+use App\Models\User;
+use Core\Controller;
+use Core\Helper;
+use App\Models\Order;
 /**
  * ProfileController.php
  * Контроллер для authetication users

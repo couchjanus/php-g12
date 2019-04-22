@@ -3,6 +3,11 @@
  * class Connection
  */
 
+namespace Core;
+
+use PDO;
+
+
 class Connection
 {
     const ERROR_UNABLE = 'ERROR: no database connection';

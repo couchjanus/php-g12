@@ -1,6 +1,3 @@
-<?php
-require_once VIEWS.'partials/admin/_head.php';
-?>
 <div class="content-box-large">
   <div class="panel-heading">
     <div class="panel-title"><h3><?= $title;?></h3></div>

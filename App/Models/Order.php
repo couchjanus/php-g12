@@ -3,6 +3,11 @@
  * Модель для работы с заказами
  */
 
+namespace App\Models;
+
+use Core\Connection;
+use PDO;
+
 class Order
 {
     /**

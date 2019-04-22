@@ -1,7 +1,14 @@
 <?php
 
-require_once MODELS.'User.php';
-require_once MODELS.'Order.php';
+// require_once MODELS.'User.php';
+// require_once MODELS.'Order.php';
+
+namespace App\Controllers;
+
+use App\Models\Order;
+use App\Models\User;
+use Core\Helper;
+use Core\Controller;
 
 /**
  * OrderController.php

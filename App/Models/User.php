@@ -2,6 +2,11 @@
 /**
  * class User
  */
+namespace App\Models;
+
+use Core\Connection;
+use PDO;
+
 class User
 {
     /**

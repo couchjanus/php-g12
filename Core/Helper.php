@@ -1,5 +1,5 @@
 <?php
-
+namespace Core;
 class Helper {
 
     public static function redirect($redirect_url = '/')

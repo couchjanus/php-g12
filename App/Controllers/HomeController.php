@@ -1,5 +1,9 @@
 <?php
 // HomeController.php
+namespace App\Controllers;
+
+use Core\Controller;
+use App\Models\Product;
 
 require_once MODELS.'Product.php';
 
